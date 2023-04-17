@@ -51,12 +51,13 @@ import Card from "../components/Card.astro";
 
   document.addEventListener("keyup", (e) => {
     if(e.key == "|"){
+      e.preventDefault()
       async function complete(){
 
         const payload = {
           "model": "text-davinci-003",
-                "prompt": "This is a short email to explain to you why you are being fired. In short,",
-                "max_tokens": 500,
+                "prompt": textbox.value,
+                "max_tokens": 100,
                 // "temperature": 0,
                 // "top_p": 1,
                 // "n": 1,
@@ -78,6 +79,7 @@ import Card from "../components/Card.astro";
           if(data.error){alert("API error ‼️ Please check you API Key, and check the console for error logs 🪵");console.log(data)}
           else {
             console.log(data)
+            startListen(data.choices[0].text, textbox, 1);
           }
         });
       }
@@ -91,14 +93,16 @@ import Card from "../components/Card.astro";
     box.addEventListener("keydown", (e) => {
       if (i <= text.length) {
         e.preventDefault();
-        textbox.value = text.substring(0, i * speed+1);
-        console.log(text[0]);
+
+        textbox.value += text[0];
+        text = text.slice(1)
+
+        console.log(text[0], text, i);
         i++;
       }
     });
-
   }
-  startListen(demo_text, textbox, speed)
+  // startListen(demo_text, textbox, speed)
 </script>
 
 <style>
@@ -151,12 +155,13 @@ import Card from "../components/Card.astro";
     background-color: rgb(233, 233, 233);
     margin: 2rem;
     width: 50vw;
-    height: 100vh;
+    height: 50vh;
 
     border-radius: 10px;
     /* border: 1px rgba(0, 0, 0, 0.148) solid; */
 
     padding: 2rem;
+    resize: none;
   }
 </style>
 
