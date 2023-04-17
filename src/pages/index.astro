@@ -27,24 +27,28 @@ import Card from "../components/Card.astro";
 <script>
   // Wierd astro bug
   window.scrollTo(0,0);
-
+  
   // Welcome message
   console.log(`
-    Welcome to the logs, all the API responses are logged here in case you want to look at them, as well as any errors.
-
-    have fun -
-    - @NalinPlad on github
+  Welcome to the logs, all the API responses are logged here in case you want to look at them, as well as any errors.
+  
+  have fun -
+  - @NalinPlad on github
   `)
   
   
   
   let demo_text =
   'Did you not read the header??\nYou need to enter you OpenAI API key before using this app!\n\nIf you need help finding that, click "Where do I find that?" in the header';
-
+  
   const textbox = document.querySelector("#type") as HTMLTextAreaElement;
   const apikey = document.querySelector("#apikey") as HTMLInputElement;
   const header = document.querySelector("header") as HTMLElement;
   
+  const modalbutton = document.querySelector("#btn-modal") as HTMLButtonElement;
+  const modal = document.querySelector("#modal-box") as HTMLDivElement;
+  const close = document.querySelector(".close") as HTMLSpanElement;
+
   const speed = 1;
 
 
@@ -52,11 +56,26 @@ import Card from "../components/Card.astro";
   apikey.addEventListener("keydown", (e) => {
     if(e.key === "Enter") {
       // Auth check
-      // if(localStorage.getItem("") === undefined){
-        localStorage.setItem("", apikey.value);
-        header.style.opacity = "0%";
-        
-      // }
+      async function checkAuth(){
+        await fetch("https://api.openai.com/v1/models/text-davinci-003", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${apikey.value}`
+          }
+        })
+        .then(resp => resp.json())
+        .then(data => {
+          if(data.error){alert("API error ‼️ Please check you API Key, and check the console for error logs 🪵");console.log(data)}
+          else {
+            // console.log(data)
+            // startListen(data.choices[0].text, textbox, 1);
+            localStorage.setItem("", apikey.value);
+            header.style.display = "none";
+          }
+        });
+      }
+
+      checkAuth();
     }
   });
 
@@ -119,9 +138,6 @@ import Card from "../components/Card.astro";
   // 
 
 
-  const modalbutton = document.querySelector("#btn-modal") as HTMLButtonElement;
-  const modal = document.querySelector("#modal-box") as HTMLDivElement;
-  const close = document.querySelector(".close") as HTMLSpanElement;
 
   // When the user clicks on the button, open the modal
   modalbutton.onclick = function() {
@@ -244,6 +260,8 @@ import Card from "../components/Card.astro";
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+    transition: all 0.5s;
   }
 
 /* Modal Content/Box */
@@ -260,11 +278,20 @@ import Card from "../components/Card.astro";
   align-items: center;
 
   gap: 1rem;
+
+  border-radius: 10px;
 }
 
 .modal-content > h1 {
   font-size: 5rem;
   margin-bottom: 1rem;
+}
+
+.modal-content > p {
+  font-size: 1rem;
+  width: 50%;
+  text-align: center;
+  color: #888;
 }
 
 /* The Close Button */
