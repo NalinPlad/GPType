@@ -16,31 +16,89 @@ import Card from "../components/Card.astro";
 </Layout>
 
 <script>
-  let text =
-    'Did you not read the header??\nYou need to enter you OpenAI API key before using this app!\n\nIf you need help finding that, click "Where do I find that?" in the header';
+  // Wierd astro bug
+  window.scrollTo(0,0);
+  // Welcome message
+  console.log(`
+    Welcome to the logs, all the API responses are logged here in case you want to look at them, as well as any errors.
+
+    have fun -
+    - @NalinPlad on github
+  `)
+  
+  
+  
+  let demo_text =
+  'Did you not read the header??\nYou need to enter you OpenAI API key before using this app!\n\nIf you need help finding that, click "Where do I find that?" in the header';
 
   const textbox = document.querySelector("#type") as HTMLTextAreaElement;
   const apikey = document.querySelector("#apikey") as HTMLInputElement;
+  
+  const speed = 1;
 
-  let i = 0;
-  const speed = 1.5;
-
+  if(localStorage.getItem("")){
+    apikey.value = localStorage.getItem("");
+  }
+  
   apikey.addEventListener("keydown", (e) => {
     if(e.key === "Enter") {
       // Auth check
-
+      // if(localStorage.getItem("") === undefined){
+        localStorage.setItem("", apikey.value);
+      // }
     }
   });
 
-  textbox.addEventListener("keydown", (e) => {
-    // if(document.activeElement === apikey){return}
+  document.addEventListener("keyup", (e) => {
+    if(e.key == "|"){
+      async function complete(){
 
-    if (i <= text.length) {
-      textbox.value = text.substring(0, i * speed+1);
-      console.log(text[0]);
-      i++;
+        const payload = {
+          "model": "text-davinci-003",
+                "prompt": "This is a short email to explain to you why you are being fired. In short,",
+                "max_tokens": 500,
+                // "temperature": 0,
+                // "top_p": 1,
+                // "n": 1,
+                // "stream": false,
+                // "logprobs": null,
+                // "stop": "\n" 
+        }
+
+        await fetch("https://api.openai.com/v1/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apikey.value}`
+          },
+          body: JSON.stringify(payload)
+        })
+        .then(resp => resp.json())
+        .then(data => {
+          if(data.error){alert("API error ‼️ Please check you API Key, and check the console for error logs 🪵");console.log(data)}
+          else {
+            console.log(data)
+          }
+        });
+      }
+
+      complete()
     }
   });
+  
+  function startListen(text:string, box:HTMLTextAreaElement, speed: number) {
+    let i = 0;
+    box.addEventListener("keydown", (e) => {
+      if (i <= text.length) {
+        e.preventDefault();
+        textbox.value = text.substring(0, i * speed+1);
+        console.log(text[0]);
+        i++;
+      }
+    });
+
+  }
+  startListen(demo_text, textbox, speed)
 </script>
 
 <style>
