@@ -33,6 +33,7 @@ import Card from "../components/Card.astro";
 
   const textbox = document.querySelector("#type") as HTMLTextAreaElement;
   const apikey = document.querySelector("#apikey") as HTMLInputElement;
+  const header = document.querySelector("header") as HTMLElement;
   
   const speed = 1;
 
@@ -47,6 +48,8 @@ import Card from "../components/Card.astro";
       // Auth check
       // if(localStorage.getItem("") === undefined){
         localStorage.setItem("", apikey.value);
+        header.style.opacity = "0%";
+        
       // }
     }
   });
@@ -123,6 +126,8 @@ import Card from "../components/Card.astro";
     display: flex;
     align-items: center;
 
+    transition: all 0.5s;
+
     /* font-family: 'Courier New', Courier, monospace; */
   }
 
@@ -163,6 +168,7 @@ import Card from "../components/Card.astro";
     height: 50vh;
 
     border-radius: 10px;
+    border: none;
     /* border: 1px rgba(0, 0, 0, 0.148) solid; */
 
     padding: 2rem;
