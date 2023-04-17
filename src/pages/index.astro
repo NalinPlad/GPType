@@ -6,12 +6,13 @@ import Card from "../components/Card.astro";
 <Layout title="GPType">
   <header>
     <span class="text-gradient">GPType</span>
-    <button id="btn-modal">Start</button>
+    <!-- <button id="btn-modal">Start</button> -->
 
     <div id="modal-box" class="modal">
       <div class="modal-content">
         <h1><span class="text-gradient">GPType</span></h1>
-        <p>Hacker Typer but GPT-3. Enter your API key, or click close and type in the text box to try to demo.</p>
+        <p>Hacker Typer but GPT-3. You can reopen this window using Shift + ]</p>
+        <!-- <p>hello test test test test test test test </p> -->
         <label>Enter OpenAI API key</label>
         <input pattern="^sk\-[a-zA-Z0-9]+" type="text" placeholder="sk-xxxxxxxxxxxxxxxx" id="apikey"/>
         <span class="close">&times;</span>
@@ -39,13 +40,13 @@ import Card from "../components/Card.astro";
   
   
   let demo_text =
-  'Did you not read the header??\nYou need to enter you OpenAI API key before using this app!\n\nIf you need help finding that, click "Where do I find that?" in the header';
+  'Hello human! This is an example of the typing function on this site.\n\nWhen you type, the text output is replaced with a predefined string, in this case it is hard coded, but if you supply an OpenAI API key, the text will be completed by GPT-3.\n\nTo activate the generation, use the keybind "Shift + \\". The app will then request a completion of the text, and then continue to type it like you are doing right now. To continue, press "Shift + ]". Then enter your API key, press enter, then type in some text to complete.\n\nSAFETY\nAll API requests and code is run client side, and your key is stored in the browsers LocalStorage. This is a completely static site. Check the network tab of the devtools if you dont believe me';
   
   const textbox = document.querySelector("#type") as HTMLTextAreaElement;
   const apikey = document.querySelector("#apikey") as HTMLInputElement;
   const header = document.querySelector("header") as HTMLElement;
   
-  const modalbutton = document.querySelector("#btn-modal") as HTMLButtonElement;
+  // const modalbutton = document.querySelector("#btn-modal") as HTMLButtonElement;
   const modal = document.querySelector("#modal-box") as HTMLDivElement;
   const close = document.querySelector(".close") as HTMLSpanElement;
 
@@ -80,7 +81,7 @@ import Card from "../components/Card.astro";
   });
 
   document.addEventListener("keydown", (e) => {
-    if(e.key == "|"){
+    if(e.key === "|"){
       e.preventDefault()
       async function complete(){
 
@@ -115,6 +116,9 @@ import Card from "../components/Card.astro";
       }
 
       complete()
+    } else if(e.key === "}") {
+      modal.style.opacity = "100%"
+      modal.style.display = "flex"; 
     }
   });
   
@@ -140,9 +144,9 @@ import Card from "../components/Card.astro";
 
 
   // When the user clicks on the button, open the modal
-  modalbutton.onclick = function() {
-    modal.style.display = "block";
-  }
+  // modalbutton.onclick = function() {
+  //   modal.style.display = "block";
+  // }
 
   // When the user clicks on <span> (x), close the modal
   close.onclick = function() {
@@ -153,6 +157,7 @@ import Card from "../components/Card.astro";
   window.onclick = function(event) {
     if (event.target == modal) {
       modal.style.display = "none";
+      modal.style.opacity = "100%"
     }
   }
 
@@ -160,8 +165,10 @@ import Card from "../components/Card.astro";
   if(localStorage.getItem("")){
     apikey.value = localStorage.getItem("");
   } else {
+    textbox.placeholder = "Start Typing..."
     startListen(demo_text, textbox, speed)
-    modal.style.display = "block";
+    // modal.style.opacity = "100%"
+    // modal.style.display = "flex";
   }
 </script>
 
@@ -177,6 +184,7 @@ import Card from "../components/Card.astro";
 
     display: flex;
     align-items: center;
+    justify-content: center;
 
     transition: all 0.5s;
 
@@ -257,21 +265,27 @@ import Card from "../components/Card.astro";
     top: 0;
     width: 100vw; /* Full width */
     height: 100vh; /* Full height */
+    max-height: 100%;
+    max-width: 100%;
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+
+    align-items: center;
+    justify-content: center;
 
     transition: all 0.5s;
+    opacity: 0%;
   }
 
 /* Modal Content/Box */
 .modal-content {
   font-size: 1rem;
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  /* margin: 15% auto; 15% from the top and centered  */
   padding: 20px;
   border: 1px solid #888;
-  width: fit-content; /* Could be more or less, depending on screen size */
+  width: 50vmax;
 
   display: flex;
   flex-direction: column;
