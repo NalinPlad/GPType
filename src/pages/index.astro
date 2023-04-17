@@ -1,81 +1,132 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
 ---
 
-<Layout title="Welcome to Astro.">
-	<main>
-		<h1>Welcome to <span class="text-gradient">Astro</span></h1>
-		<p class="instructions">
-			To get started, open the directory <code>src/pages</code> in your project.<br />
-			<strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
-		</p>
-		<ul role="list" class="link-card-grid">
-			<Card
-				href="https://docs.astro.build/"
-				title="Documentation"
-				body="Learn how Astro works and explore the official API docs."
-			/>
-			<Card
-				href="https://astro.build/integrations/"
-				title="Integrations"
-				body="Supercharge your project with new frameworks and libraries."
-			/>
-			<Card
-				href="https://astro.build/themes/"
-				title="Themes"
-				body="Explore a galaxy of community-built starter themes."
-			/>
-			<Card
-				href="https://astro.build/chat/"
-				title="Community"
-				body="Come say hi to our amazing Discord community. ❤️"
-			/>
-		</ul>
-	</main>
+<Layout title="GPType">
+  <header>
+    <span class="text-gradient">GPType</span>
+    <label>Enter OpenAI API key</label>
+    <input pattern="^sk\-[a-zA-Z0-9]+" type="text" placeholder="sk-xxxxxxxxxxxxxxxx" id="apikey"/>
+    <!-- <input type="button" id="launch" value="→"/> -->
+  </header>
+  <main>
+    <textarea id="type"/>
+  </main>
 </Layout>
 
+<script>
+  let text =
+    'Did you not read the header??\nYou need to enter you OpenAI API key before using this app!\n\nIf you need help finding that, click "Where do I find that?" in the header';
+
+  const textbox = document.querySelector("#type") as HTMLTextAreaElement;
+  const apikey = document.querySelector("#apikey") as HTMLInputElement;
+
+  let i = 0;
+  const speed = 1.5;
+
+  apikey.addEventListener("keydown", (e) => {
+    if(e.key === "Enter") {
+      // Auth check
+
+    }
+  });
+
+  textbox.addEventListener("keydown", (e) => {
+    // if(document.activeElement === apikey){return}
+
+    if (i <= text.length) {
+      textbox.value = text.substring(0, i * speed+1);
+      console.log(text[0]);
+      i++;
+    }
+  });
+</script>
+
 <style>
-	main {
-		margin: auto;
-		padding: 1.5rem;
-		max-width: 60ch;
-	}
-	h1 {
-		font-size: 3rem;
-		font-weight: 800;
-		margin: 0;
-	}
-	.text-gradient {
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
-	}
-	.instructions {
-		line-height: 1.6;
-		margin: 1rem 0;
-		border: 1px solid rgba(var(--accent), 25%);
-		background-color: white;
-		padding: 1rem;
-		border-radius: 0.4rem;
-	}
-	.instructions code {
-		font-size: 0.875em;
-		font-weight: bold;
-		background: rgba(var(--accent), 12%);
-		color: rgb(var(--accent));
-		border-radius: 4px;
-		padding: 0.3em 0.45em;
-	}
-	.instructions strong {
-		color: rgb(var(--accent));
-	}
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 1rem;
-		padding: 0;
-	}
+  header {
+    width: 100vw;
+    max-width:100%;  /* added */
+    background-color: rgb(238, 238, 238);
+
+    padding: 20px;
+    font-weight: 800;
+    font-size: 1rem;
+
+    display: flex;
+    align-items: center;
+
+    /* font-family: 'Courier New', Courier, monospace; */
+  }
+
+  header > span {
+    font-size: 2rem;
+    margin-inline: 1rem;
+  }
+
+  header > label {
+    margin-inline-start: 3rem;
+    margin-inline-end: 1rem ;
+  }
+
+  header > input {
+    border: 1px solid rgba(128, 128, 128, 0.529);
+    border-radius: 2px;
+    padding: 2px;
+    font-family: font-family: system-ui, sans-serif;
+  }
+
+  input:focus {
+    outline-width: 0;
+  }
+
+  textarea:focus {
+    outline-width: 0;
+  }
+
+  main {
+    display: flex;
+    justify-content: center;
+  }
+
+  #type {
+    background-color: rgb(233, 233, 233);
+    margin: 2rem;
+    width: 50vw;
+    height: 100vh;
+
+    border-radius: 10px;
+    /* border: 1px rgba(0, 0, 0, 0.148) solid; */
+
+    padding: 2rem;
+  }
+</style>
+
+<style is:global>
+  * {
+  margin: 0;
+  padding: 0;
+  font-family: font-family: system-ui, sans-serif;
+}
+  body {
+    margin: none;
+    overflow: hidden;
+  }
+
+  .text-gradient {
+    background-image: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400%;
+    background-position: 0%;
+  }
+
+  code {
+    font-size: 0.875em;
+    font-weight: bold;
+    background: rgba(var(--accent), 12%);
+    color: rgb(var(--accent));
+    border-radius: 4px;
+    padding: 0.3em 0.45em;
+  }
 </style>
