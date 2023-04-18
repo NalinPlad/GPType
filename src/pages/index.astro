@@ -5,9 +5,7 @@ import Card from "../components/Card.astro";
 
 <Layout title="GPType">
   <header>
-    <span class="text-gradient">GPType</span>
-    <!-- <button id="btn-modal">Start</button> -->
-
+    <span class="text-gradient">GPType</span><span class="desc">Sneaky GPT Completions<br>Like Hacker Typer but GPT</span>
     <div id="modal-box" class="modal">
       <div class="modal-content">
         <h1><span class="text-gradient">GPType</span></h1>
@@ -15,7 +13,7 @@ import Card from "../components/Card.astro";
         <!-- <p>hello test test test test test test test </p> -->
         <label>Enter OpenAI API key</label>
         <input pattern="^sk\-[a-zA-Z0-9]+" type="text" placeholder="sk-xxxxxxxxxxxxxxxx" id="apikey"/>
-        <span class="close">&times;</span>
+        <span class="close">Close</span>
       </div>
     </div>
     <!-- <input type="button" id="launch" value="→"/> -->
@@ -40,7 +38,7 @@ import Card from "../components/Card.astro";
   
   
   let demo_text =
-  'Hello human! This is an example of the typing function on this site.\n\nWhen you type, the text output is replaced with a predefined string, in this case it is hard coded, but if you supply an OpenAI API key, the text will be completed by GPT-3.\n\nTo activate the generation, use the keybind "Shift + \\". The app will then request a completion of the text, and then continue to type it like you are doing right now. To continue, press "Shift + ]". Then enter your API key, press enter, then type in some text to complete.\n\nSAFETY\nAll API requests and code is run client side, and your key is stored in the browsers LocalStorage. This is a completely static site. Check the network tab of the devtools if you dont believe me';
+  'Hello human! This is an example of the typing function on this site.\n\nWhen you type, the text output is replaced with a predefined string, in this case it is hard coded, but if you supply an OpenAI API key, the text will be completed by GPT-3.\n\nTo activate the generation, use the keybind "Shift + \\". The app will then request a completion of the text, and then continue to type it like you are doing right now. To continue, press "Shift + ]". Then enter your API key, press enter, then type in some text to complete.\n\nSAFETY\nAll API requests and code is run client side, and your key is stored in the browsers LocalStorage. This is a completely static site. Check the network tab of the devtools if you dont believe me. THE END';
   
   const textbox = document.querySelector("#type") as HTMLTextAreaElement;
   const apikey = document.querySelector("#apikey") as HTMLInputElement;
@@ -161,14 +159,14 @@ import Card from "../components/Card.astro";
     }
   }
 
+  textbox.focus();
+
 
   if(localStorage.getItem("")){
     apikey.value = localStorage.getItem("");
   } else {
     textbox.placeholder = "Start Typing..."
     startListen(demo_text, textbox, speed)
-    // modal.style.opacity = "100%"
-    // modal.style.display = "flex";
   }
 </script>
 
@@ -189,6 +187,13 @@ import Card from "../components/Card.astro";
     transition: all 0.5s;
 
     /* font-family: 'Courier New', Courier, monospace; */
+  }
+
+  .desc {
+    font-size: 1rem;
+    color:#888;
+    font-weight: 300;
+    line-height: 2rem;
   }
 
   button {
@@ -306,14 +311,23 @@ import Card from "../components/Card.astro";
   width: 50%;
   text-align: center;
   color: #888;
+  margin-bottom: 1rem;
 }
 
 /* The Close Button */
 .close {
+  margin-top: 1rem;
   color: #aaa;
   float: right;
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 18px;
+  /* font-weight: bold; */
+  font-weight: 400;
+  background-color: #ebebeb;
+  width: 5rem;
+  text-align: center;
+
+  border-radius: 5px;
+  transition: all 0.2s;
 }
 
 .close:hover,
