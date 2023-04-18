@@ -5,13 +5,17 @@ import Card from "../components/Card.astro";
 
 <Layout title="GPType">
   <header>
-    <span class="text-gradient">GPType</span><span class="desc">Sneaky GPT Completions<br>Like Hacker Typer but GPT</span>
+    <span class="text-gradient">GPType</span>
+    <span class="desc">Sneaky GPT-3 Completions
+      <br>
+    Like Hacker Typer<a href="https://hackertyper.net/" target="_blank"><sup>[1]</sup></a> but GPT</span>
+
     <div id="modal-box" class="modal">
       <div class="modal-content">
         <h1><span class="text-gradient">GPType</span></h1>
         <p>Hacker Typer but GPT-3. You can reopen this window using Shift + ]</p>
         <!-- <p>hello test test test test test test test </p> -->
-        <label>Enter OpenAI API key</label>
+        <label>Enter OpenAI API key and hit Enter</label>
         <input pattern="^sk\-[a-zA-Z0-9]+" type="text" placeholder="sk-xxxxxxxxxxxxxxxx" id="apikey"/>
         <span class="close">Close</span>
       </div>
@@ -66,10 +70,9 @@ import Card from "../components/Card.astro";
         .then(data => {
           if(data.error){alert("API error ‼️ Please check you API Key, and check the console for error logs 🪵");console.log(data)}
           else {
-            // console.log(data)
-            // startListen(data.choices[0].text, textbox, 1);
             localStorage.setItem("", apikey.value);
             header.style.display = "none";
+            window.location = window.location;
           }
         });
       }
@@ -117,6 +120,7 @@ import Card from "../components/Card.astro";
     } else if(e.key === "}") {
       modal.style.opacity = "100%"
       modal.style.display = "flex"; 
+      header.style.display = "flex"
     }
   });
   
@@ -164,8 +168,9 @@ import Card from "../components/Card.astro";
 
   if(localStorage.getItem("")){
     apikey.value = localStorage.getItem("");
+    header.style.display = "none";
   } else {
-    textbox.placeholder = "Start Typing..."
+    textbox.placeholder = "Start Typing Normally...";
     startListen(demo_text, textbox, speed)
   }
 </script>
@@ -187,6 +192,15 @@ import Card from "../components/Card.astro";
     transition: all 0.5s;
 
     /* font-family: 'Courier New', Courier, monospace; */
+  }
+
+  a {
+    color: #888;
+    text-decoration: none;
+  }
+
+  sup {
+    text-decoration: underline;
   }
 
   .desc {
